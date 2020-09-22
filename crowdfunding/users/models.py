@@ -3,9 +3,12 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
-    pass
+    # required field = models.field()
+    first_name = models.CharField(max_length=80, verbose_name ="First Name")
+    last_name = models.CharField(max_length=80, verbose_name="Last Name")
+    #image = models.URLField(max_length=200, verbose_name="Photo")
+    email = models.CharField(max_length=100, verbose_name="Email")
+    location = models.CharField(max_length=100,  verbose_name="Location")
 
-    def __str__(self):
-        return self.username
-
-# Create your models here.
+    def full_name(self):
+        return '%s %s' % self.first_name, self.last_name
