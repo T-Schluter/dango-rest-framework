@@ -28,7 +28,18 @@ class ProjectList(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-       
+
+    def put(self, request):
+        serializer = ProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response (
+                serializer.data, status=status.HTTP_201_CREATED
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 class ProjectDetail(APIView):
     permission_classes = [
@@ -45,8 +56,20 @@ class ProjectDetail(APIView):
 
     def get(self, request, pk):
         project = self.get_object(pk)
-        serializer = ProjectDetailSerializer(project)
+        serializer = ProjectsDetailSerializer(project)
         return Response(serializer.data)
+
+def put(self, request, pk):
+    project = self.get_object(pk)
+    data = request.data
+    serializer = ProjectsDetailSerializer(
+            instance=project,
+            data=data,
+            partial=True
+    )
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.errors)
 
 class PledgeList(APIView):
 
